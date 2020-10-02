@@ -396,11 +396,11 @@ end
 
 Kaffy treats the show and edit pages as one, the form page.
 
-To customize the fields shown in this page, define a `form_fields/1` function in your admin module.
+To customize the fields shown in this page, define a `form_fields/2` function in your admin module.
 
 ```elixir
 defmodule MyApp.Blog.PostAdmin do
-  def form_fields(_) do
+  def form_fields(_conn, _schema) do
     [
       title: nil,
       status: %{choices: [{"Publish", "publish"}, {"Pending", "pending"}]},
@@ -413,7 +413,7 @@ defmodule MyApp.Blog.PostAdmin do
 end
 ```
 
-The `form_fields/1` function takes a schema and should return a keyword list of fields and their options.
+The `form_fields/2` function takes a schema and should return a keyword list of fields and their options.
 
 The keys of the list must correspond to the schema fields.
 

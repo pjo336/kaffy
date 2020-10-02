@@ -43,7 +43,7 @@ defmodule Kaffy.ResourceAdmin do
   end
 
   @doc """
-  form_fields/1 takes a schema and returns a keyword list of fields and their options for the new/edit form.
+  form_fields/2 takes a conn and a schema, and returns a keyword list of fields and their options for the new/edit form.
 
   Supported options are:
 
@@ -58,13 +58,13 @@ defmodule Kaffy.ResourceAdmin do
 
   If you want to remove a field from being rendered, just remove it from the list.
 
-  If form_fields/1 is not defined, Kaffy will return all the fields with
+  If form_fields/2 is not defined, Kaffy will return all the fields with
   their default types based on the schema.
 
   Example:
 
   ```elixir
-  def form_fields(_schema) do
+  def form_fields(_conn, _schema) do
     [
       title: %{label: "Subject"},
       slug: nil,
@@ -76,13 +76,13 @@ defmodule Kaffy.ResourceAdmin do
   end
   ```
   """
-  def form_fields(resource) do
+  def form_fields(conn, resource) do
     schema = resource[:schema]
 
     Utils.get_assigned_value_or_default(
       resource,
       :form_fields,
-      ResourceSchema.form_fields(schema)
+      ResourceSchema.form_fields(conn, schema)
     )
     |> set_default_field_options(schema)
   end
@@ -135,7 +135,7 @@ defmodule Kaffy.ResourceAdmin do
 
   @doc """
   `authorized?/2` takes the schema and the current Plug.Conn struct and
-  should return a boolean value.
+  should return a boolean value
 
   Returning false will prevent the access of this resource for the current user/request.
 
